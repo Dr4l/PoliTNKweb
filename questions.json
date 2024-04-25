@@ -1,0 +1,26 @@
+[
+    {
+      "question": "What is the capital of France?",
+      "multipleCorrect": false,
+      "answers": [
+        {"text": "Paris", "correct": true},
+        {"text": "Berlin", "correct": false},
+        {"text": "Madrid", "correct": false}
+      ],
+      "explanation": "abc..."
+    },
+    {
+      "question": "Select the colors of the rainbow.",
+      "multipleCorrect": true,
+      "answers": [
+        {"text": "Red", "correct": true},
+        {"text": "Orange", "correct": true},
+        {"text": "Yellow", "correct": true},
+        {"text": "Green", "correct": true},
+        {"text": "Blue", "correct": true},
+        {"text": "Indigo", "correct": true},
+        {"text": "Violet", "correct": true}
+      ]
+    }
+  ]
+  
