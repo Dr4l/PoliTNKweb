@@ -46,6 +46,13 @@ function shuffleArray(array) {
 
 
 function showQuestion(question) {
+    // Update the question ID display
+    const questionIdElement = document.getElementById('question-id-number');
+    if (questionIdElement) {
+        questionIdElement.innerText = question.id;
+    }
+
+    // Display the question text
     questionContainer.innerText = question.question;
     answerButtons.innerHTML = '';
 
@@ -61,10 +68,10 @@ function showQuestion(question) {
     });
 
     if (question.multipleCorrect) {
-        // If multiple correct answers are allowed, update styles or add indicators as needed
         answerButtons.classList.add('multiple-correct');
     }
 }
+
 
 
 function toggleAnswerSelection(button, answer) {
