@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Question Selector</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 0;
+        }
+
+        button {
+            display: block;
+            width: 200px;
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Questions and Answers</h1>
+    <div id="question-buttons"></div>
+
+    <script>
+        // Function to fetch questions from JSON file
+        async function fetchQuestions() {
+            try {
+                const response = await fetch('questions.json'); // Path to your JSON file
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                console.error('Error fetching questions:', error);
+                return [];
+            }
+        }
+
+        // Function to create a button for each question
+        async function createQuestionButtons() {
+            const questionsData = await fetchQuestions();
+            const questionButtonsContainer = document.getElementById('question-buttons');
+
+            if (questionsData && questionsData.length > 0) {
+                questionsData.forEach(question => {
+                    const button = document.createElement('button');
+                    button.textContent = `Question nr.${question.id}`;
+                    button.addEventListener('click', () => navigateToQuestion(question.id));
+                    questionButtonsContainer.appendChild(button);
+                });
+            } else {
+                questionButtonsContainer.textContent = 'No questions found.';
+            }
+        }
+
+        // Function to navigate to question.html with the specified question ID
+        function navigateToQuestion(questionId) {
+            window.location.href = `questions.html?id=${questionId}`;
+        }
+
+        // Generate the question buttons on page load
+        createQuestionButtons();
+    </script>
+</body>
+</html>

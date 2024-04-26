@@ -76,8 +76,12 @@
     <h1>Add Question</h1>
 
     <form id="add-question-form">
+        <label for="question-id">Question ID:</label>
+        <input type="number" id="question-id" name="question-id" required>
+
         <label for="question">Question:</label>
         <textarea id="question" name="question" rows="3" required></textarea>
+
 
         <div class="answers-container">
             <label>Answers:</label>
@@ -187,7 +191,8 @@ function updateAnswerIndices() {
             }
         }
 
-        function submitQuestion() {
+function submitQuestion() {
+    const questionId = document.getElementById('question-id').value;
     const questionText = document.getElementById('question').value;
     const answers = [];
     const correctAnswers = [];
@@ -207,6 +212,7 @@ function updateAnswerIndices() {
     const explanationText = includeExplanationCheckbox.checked ? document.getElementById('explanation').value : '';
 
     questionObject = {
+        id: questionId, // Include the question ID in the questionObject
         question: questionText,
         multipleCorrect: answers.some(answer => answer.correct),
         answers: answers,
@@ -223,6 +229,7 @@ function updateAnswerIndices() {
     document.getElementById('add-question-form').reset();
     answerIndex = 3; // Reset answerIndex for the next question
 }
+
 
 function displayJsonText() {
     const jsonText = document.getElementById('jsonText');

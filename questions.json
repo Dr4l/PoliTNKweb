@@ -18,9 +18,9 @@
         {"text": "Red", "correct": true},
         {"text": "Orange", "correct": true},
         {"text": "Yellow", "correct": true},
-        {"text": "Green", "correct": true},
+        {"text": "Green", "correct": false},
         {"text": "Blue", "correct": true},
-        {"text": "Indigo", "correct": true},
+        {"text": "Indigo", "correct": false},
         {"text": "Violet", "correct": true}
       ]
     }
