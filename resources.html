@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Resources</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f7f7f7;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+            margin-top: 0;
+        }
+
+        main {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-top: 0;
+        }
+
+        .resource-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .resource-list li {
+            border-bottom: 1px solid #ddd;
+            padding: 15px 0;
+        }
+
+        .resource-list li:last-child {
+            border-bottom: none;
+        }
+
+        .resource-link {
+            color: #007bff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .resource-link:hover {
+            text-decoration: underline;
+        }
+
+        footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #333;
+            color: #fff;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="navbar-container"></div>
+
+    <header>
+        <h1>Math Resources</h1>
+    </header>
+
+    <main>
+        <h2>Bracket 1</h2>
+        <ul class="resource-list">
+            <li><a href="#" class="resource-link">Line 1</a> by 1</li>
+            <li><a href="#" class="resource-link">Line 2</a> by 2</li>
+            <li><a href="#" class="resource-link">Line 3</a> by 3</li>
+        </ul>
+
+        <h2>Bracket 2</h2>
+        <ul class="resource-list">
+            <li><a href="#" class="resource-link">Line 4</a></li>
+            <li><a href="#" class="resource-link">Line 5</a></li>
+            <li><a href="#" class="resource-link">Line 6</a></li>
+        </ul>
+
+        <h2>Bracket 3</h2>
+        <ul class="resource-list">
+            <li><a href="#" class="resource-link">Line 7</a> - 7</li>
+            <li><a href="#" class="resource-link">Line 8</a> - 8</li>
+            <li><a href="#" class="resource-link">Line 9</a> - 9</li>
+        </ul>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 | Math Resources</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const navbarContainer = document.getElementById('navbar-container');
+        
+            fetch('navbar.html')
+                .then(response => response.text())
+                .then(html => {
+                    navbarContainer.innerHTML = html;
+                })
+                .catch(error => {
+                    console.error('Failed to fetch navbar:', error);
+                });
+        });
+    </script>
+</body>
+</html>

@@ -23,6 +23,7 @@
             cursor: pointer;
         }
     </style>
+    <div id="navbar-container"></div>
 </head>
 <body>
     <h1>Questions and Answers</h1>
@@ -66,5 +67,35 @@
         // Generate the question buttons on page load
         createQuestionButtons();
     </script>
+     <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const navbarContainer = document.getElementById('navbar-container');
+        
+            fetch('navbar.html')
+                .then(response => response.text())
+                .then(html => {
+                    navbarContainer.innerHTML = html;
+                    // Any additional JavaScript logic to initialize navbar functionality
+                })
+                .catch(error => {
+                    console.error('Failed to fetch navbar:', error);
+                });
+        });
+    </script>
+         <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                const navbarContainer = document.getElementById('navbar-container');
+            
+                fetch('navbar.html')
+                    .then(response => response.text())
+                    .then(html => {
+                        navbarContainer.innerHTML = html;
+                        // Any additional JavaScript logic to initialize navbar functionality
+                    })
+                    .catch(error => {
+                        console.error('Failed to fetch navbar:', error);
+                    });
+            });
+        </script>
 </body>
 </html>

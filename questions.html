@@ -8,6 +8,7 @@
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
+    <div id="navbar-container"></div>
     <div id="question-container"></div>
     <button onclick="goBack()">Back to Menu</button>
 
@@ -78,6 +79,21 @@
         function goBack() {
             window.location.href = 'catalogue.html'; // Replace 'catalogue.html' with your actual menu page URL
         }
+    </script>
+     <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const navbarContainer = document.getElementById('navbar-container');
+        
+            fetch('navbar.html')
+                .then(response => response.text())
+                .then(html => {
+                    navbarContainer.innerHTML = html;
+                    // Any additional JavaScript logic to initialize navbar functionality
+                })
+                .catch(error => {
+                    console.error('Failed to fetch navbar:', error);
+                });
+        });
     </script>
 </body>
 </html>

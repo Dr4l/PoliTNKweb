@@ -7,9 +7,10 @@
     <link rel="stylesheet" href="style.css">
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-
 </head>
 <body>
+    <div id="navbar-container"></div>
+
     <div id="quiz-container">
         <h1>Trivia Game</h1>
         <div id="question-container"></div>
@@ -21,5 +22,20 @@
     </div>
 
     <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const navbarContainer = document.getElementById('navbar-container');
+        
+            fetch('navbar.html')
+                .then(response => response.text())
+                .then(html => {
+                    navbarContainer.innerHTML = html;
+                    // Any additional JavaScript logic to initialize navbar functionality
+                })
+                .catch(error => {
+                    console.error('Failed to fetch navbar:', error);
+                });
+        });
+    </script>
 </body>
 </html>
