@@ -1,28 +1,24 @@
 [
-    {
+  {
       "id": 1,
-      "question": "What is the capital of France?",
+      "question": "Solve the equation \\(ax^2 + bx + c = 0\\).",
       "multipleCorrect": false,
       "answers": [
-        {"text": "Paris", "correct": true},
-        {"text": "Berlin", "correct": false},
-        {"text": "Madrid", "correct": false}
+          {"text": "\\(x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}\\)", "correct": true},
+          {"text": "\\(x = -\\frac{b}{a}\\)", "correct": false},
+          {"text": "\\(x = c - b + a\\)", "correct": false}
       ],
-      "explanation": "abc..."
-    },
-    {
+      "explanation": "The solutions to a quadratic equation \\(ax^2 + bx + c = 0\\) can be found using the quadratic formula."
+  },
+  {
       "id": 2,
-      "question": "Select the colors of the rainbow.",
-      "multipleCorrect": true,
+      "question": "What is the value of \\(\\int_0^1 x^2 dx\\)?",
+      "multipleCorrect": false,
       "answers": [
-        {"text": "Red", "correct": true},
-        {"text": "Orange", "correct": true},
-        {"text": "Yellow", "correct": true},
-        {"text": "Green", "correct": false},
-        {"text": "Blue", "correct": true},
-        {"text": "Indigo", "correct": false},
-        {"text": "Violet", "correct": true}
-      ]
-    }
-  ]
-  
+          {"text": "\\(\\frac{1}{3}\\)", "correct": true},
+          {"text": "\\(\\frac{1}{2}\\)", "correct": true},
+          {"text": "1", "correct": false}
+      ],
+      "explanation": "The definite integral of \\(x^2\\) from 0 to 1 is \\(\\frac{x^3}{3}\\) evaluated from 0 to 1, which results in \\(\\frac{1}{3}\\)."
+  }
+]

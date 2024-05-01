@@ -6,11 +6,10 @@ const feedbackContainer = document.getElementById('feedback'); // New element
 const nightModeToggle = document.getElementById('night-mode-toggle');
 const body = document.body;
 
-
 let currentQuestionIndex = 0;
 let questions = [];
 let isAnswered = false;
-let answerMapping = {}; // Added mapping to store original answers
+let selectedAnswers = [];
 
 async function getQuestions() {
     try {
@@ -26,7 +25,7 @@ function startGame() {
     currentQuestionIndex = 0;
     isAnswered = false;
     feedbackContainer.innerText = ''; // Clear previous feedback
-    answerMapping = {}; // Clear previous mapping
+    selectedAnswers = [];
 
     // Shuffle the array of questions
     questions = shuffleArray(questions);
@@ -35,7 +34,6 @@ function startGame() {
     updateActionButton('Answer');
 }
 
-// Helper function to shuffle an array using the Fisher-Yates algorithm
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -44,64 +42,50 @@ function shuffleArray(array) {
     return array;
 }
 
-
 function showQuestion(question) {
-    // Update the question ID display
     const questionIdElement = document.getElementById('question-id-number');
     if (questionIdElement) {
         questionIdElement.innerText = question.id;
     }
 
-    // Display the question text
-    questionContainer.innerText = question.question;
+    // Render the question text using MathJax
+    questionContainer.innerHTML = question.question;
+    MathJax.typeset([questionContainer]); // Trigger MathJax to typeset the question
+
+    // Render answer buttons with LaTeX math equations
     answerButtons.innerHTML = '';
 
-    const sortedAnswers = question.answers.slice().sort((a, b) => a.index - b.index);
-
-    sortedAnswers.forEach((answer, index) => {
-        answerMapping[String.fromCharCode(65 + index)] = answer;
+    question.answers.forEach(answer => {
         const button = document.createElement('button');
-        button.innerText = String.fromCharCode(65 + index) + '. ' + answer.text;
+        button.innerHTML = answer.text;
         button.classList.add('btn');
-        button.addEventListener('click', () => toggleAnswerSelection(button, answer));
+        button.addEventListener('click', () => toggleAnswerSelection(answer, button));
         answerButtons.appendChild(button);
+        MathJax.typeset([button]); // Trigger MathJax to typeset each answer button
     });
-
-    if (question.multipleCorrect) {
-        answerButtons.classList.add('multiple-correct');
-    }
 }
 
-
-
-function toggleAnswerSelection(button, answer) {
-    if (!isAnswered) {
-        if (!questions[currentQuestionIndex].multipleCorrect) {
-            // If question does not allow multiple correct answers
-            // Deselect all other answers when selecting a new one
-            questions[currentQuestionIndex].answers.forEach(a => {
-                if (a !== answer) {
-                    a.selected = false;
-                }
-            });
-
-            // Remove 'selected' class from all buttons
-            const buttons = answerButtons.querySelectorAll('.btn');
-            buttons.forEach(btn => btn.classList.remove('selected'));
-        }
-
-        answer.selected = !answer.selected; // Toggle the selected state
-        button.classList.toggle('selected'); // Toggle the 'selected' class
+function toggleAnswerSelection(answer, button) {
+    const answerIndex = selectedAnswers.indexOf(answer);
+    if (answerIndex === -1) {
+        // Answer not selected, add it to selected answers
+        selectedAnswers.push(answer);
+        button.classList.add('selected');
+    } else {
+        // Answer already selected, remove it from selected answers
+        selectedAnswers.splice(answerIndex, 1);
+        button.classList.remove('selected');
     }
 }
-
 
 function checkAnswers() {
-    const selectedAnswers = questions[currentQuestionIndex].answers.filter(answer => answer.selected);
     const correctAnswers = questions[currentQuestionIndex].answers.filter(answer => answer.correct);
+    const correctAnswerIds = correctAnswers.map(answer => answer.text);
 
-    const allCorrect = selectedAnswers.length === correctAnswers.length &&
-                       selectedAnswers.every(answer => answer.correct);
+    const selectedAnswerTexts = selectedAnswers.map(answer => answer.text);
+
+    const allCorrect = correctAnswerIds.every(answer => selectedAnswerTexts.includes(answer)) &&
+                       correctAnswerIds.length === selectedAnswerTexts.length;
 
     return { allCorrect, correctAnswers };
 }
@@ -115,31 +99,24 @@ function handleAction() {
         const { allCorrect, correctAnswers } = checkAnswers();
 
         if (allCorrect) {
-            feedbackContainer.innerText = 'Correct!';
+            feedbackContainer.innerHTML = 'Correct!';
         } else {
             const correctAnswerText = correctAnswers.map(answer => answer.text).join(', ');
-            let explanation = '';
+            feedbackContainer.innerHTML = `Incorrect! Correct answer(s): ${correctAnswerText}`;
+            MathJax.typeset([feedbackContainer]); // Trigger MathJax to typeset the feedback
+        }
 
-            if (correctAnswers.length === 1 && correctAnswers[0].text === 'None') {
-                feedbackContainer.innerText = 'Correct! The answer is None.';
-            } else {
-                feedbackContainer.innerText = `Incorrect! Correct answer: ${correctAnswerText}`;
-                explanation = questions[currentQuestionIndex].explanation || '';
-            }
-
-            if (explanation) {
-                feedbackContainer.innerText += `\nExplanation: ${explanation}`;
-            }
+        const explanation = questions[currentQuestionIndex].explanation;
+        if (explanation) {
+            feedbackContainer.innerHTML += `<br><br>Explanation: ${explanation}`;
+            MathJax.typeset([feedbackContainer]); // Trigger MathJax to typeset the explanation
         }
 
         isAnswered = true;
         updateActionButton('Next');
     } else {
         // Clear the feedback message when moving to the next question
-        feedbackContainer.innerText = '';
-
-        // Remove night mode when moving to the next question
-        body.classList.remove('night-mode');
+        feedbackContainer.innerHTML = '';
 
         currentQuestionIndex++;
 
@@ -147,16 +124,26 @@ function handleAction() {
             isAnswered = false;
             showQuestion(questions[currentQuestionIndex]);
             updateActionButton('Answer');
+            clearSelection();
         } else {
             quizContainer.innerHTML = '<h2>Quiz Completed!</h2>';
         }
     }
 }
 
-
 function toggleNightMode() {
     body.classList.toggle('night-mode');
 }
 
+
+function clearSelection() {
+    selectedAnswers = [];
+    const buttons = answerButtons.querySelectorAll('.btn');
+    buttons.forEach(button => button.classList.remove('selected'));
+}
+
+function toggleNightMode() {
+    body.classList.toggle('night-mode');
+}
 
 getQuestions();

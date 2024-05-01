@@ -4,9 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Question Page</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
     <div id="question-container"></div>
+    <button onclick="goBack()">Back to Menu</button>
 
     <script>
         // Function to extract query parameters from URL
@@ -20,6 +23,9 @@
         async function fetchQuestions() {
             try {
                 const response = await fetch('questions.json'); // Path to your JSON file
+                if (!response.ok) {
+                    throw new Error('Failed to fetch questions');
+                }
                 const data = await response.json();
                 return data;
             } catch (error) {
@@ -31,23 +37,35 @@
         // Function to display the question based on ID
         async function displayQuestionById(questionId) {
             const questionsData = await fetchQuestions();
+            const questionContainer = document.getElementById('question-container');
+
             const question = questionsData.find(q => q.id === parseInt(questionId));
 
             if (question) {
-                const questionContainer = document.getElementById('question-container');
-                questionContainer.innerHTML = `
-                    <p><strong>Question:</strong> ${question.question}</p>
-                    <ul>
-                        ${question.answers.map(answer => `
-                            <li>${answer.text} ${answer.correct ? '(Correct)' : ''}</li>
-                        `).join('')}
-                    </ul>
-                    <p><strong>Explanation:</strong> ${question.explanation || 'N/A'}</p>
-                `;
+                try {
+                    let htmlContent = `<p><strong>Question:</strong> ${question.question}</p>`;
+                    htmlContent += '<ul>';
+                    question.answers.forEach(answer => {
+                        htmlContent += `<li>${renderMath(answer.text)} ${answer.correct ? '(Correct)' : ''}</li>`;
+                    });
+                    htmlContent += '</ul>';
+                    htmlContent += `<p><strong>Explanation:</strong> ${question.explanation || 'N/A'}</p>`;
+                    questionContainer.innerHTML = htmlContent;
+
+                    await MathJax.typesetPromise();
+
+                } catch (error) {
+                    console.error('Error rendering math with MathJax:', error);
+                }
+
             } else {
-                const questionContainer = document.getElementById('question-container');
-                questionContainer.innerHTML = `<p>Question not found!</p>`;
+                questionContainer.innerHTML = `<p>Question not found for ID: ${questionId}</p>`;
             }
+        }
+
+        // Function to render LaTeX math content using MathJax
+        function renderMath(mathText) {
+            return `<span class="math-container">${mathText}</span>`;
         }
 
         // Get the question ID from the URL query parameter
@@ -55,6 +73,11 @@
 
         // Display the question based on the extracted ID
         displayQuestionById(questionId);
+
+        // Function to navigate back to the menu page
+        function goBack() {
+            window.location.href = 'catalogue.html'; // Replace 'catalogue.html' with your actual menu page URL
+        }
     </script>
 </body>
 </html>
