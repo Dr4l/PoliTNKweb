@@ -119,20 +119,14 @@ body {
   background-color: #adaaaa;
 }
 
-/* Add this to your style.css file */
+
 .btn.selected {
-  background-color: #374947; /* Green color for selected answers */
+  background-color: #374947; 
   color: #fff; /* White text for better visibility */
 }
 
-/* Add this to your style.css file */
 body {
-  transition: background-color 0.5s;
-}
-
-.night-mode {
-  background-color: #333;
-  color: #fff;
+  transition: background-color 0.5s ease, color 0.5s ease;
 }
 
 .feedback {
@@ -145,6 +139,10 @@ body {
   border-radius: 75%;
   right: 10px;
   z-index: 999; /* Ensure the button is on top */
+}
+.night-mode {
+  background-color: #333;
+  color: #fff;
 }
 #question-id
 {

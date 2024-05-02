@@ -4,31 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Question Selector</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            padding: 0;
-        }
-
-        button {
-            display: block;
-            width: 200px;
-            padding: 10px;
-            margin-bottom: 10px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-    </style>
     <div id="navbar-container"></div>
 </head>
 <body>
     <h1>Questions and Answers</h1>
     <div id="question-buttons"></div>
-
     <script>
         // Function to fetch questions from JSON file
         async function fetchQuestions() {
@@ -63,7 +43,6 @@
         function navigateToQuestion(questionId) {
             window.location.href = `questions.html?id=${questionId}`;
         }
-
         // Generate the question buttons on page load
         createQuestionButtons();
     </script>
@@ -82,20 +61,50 @@
                 });
         });
     </script>
-         <script>
-            document.addEventListener('DOMContentLoaded', () => {
-                const navbarContainer = document.getElementById('navbar-container');
-            
-                fetch('navbar.html')
-                    .then(response => response.text())
-                    .then(html => {
-                        navbarContainer.innerHTML = html;
-                        // Any additional JavaScript logic to initialize navbar functionality
-                    })
-                    .catch(error => {
-                        console.error('Failed to fetch navbar:', error);
-                    });
-            });
-        </script>
+
+
+<button id="night-mode-toggle" class="btn" onclick="toggleNightMode()">Night Mode</button>
+<link rel="stylesheet" href="common.css">
+<script>
+            function toggleNightMode() {
+            const body = document.body;
+            body.classList.toggle('night-mode');
+            const nightModeEnabled = body.classList.contains('night-mode');
+            localStorage.setItem('nightMode', nightModeEnabled);
+                }
+        function applyNightMode() {
+            const body = document.body;
+            const nightModeEnabled = localStorage.getItem('nightMode') === 'true';
+
+            if (nightModeEnabled) {
+                body.classList.add('night-mode');
+            } else {
+                body.classList.remove('night-mode');
+            }
+        }
+        document.addEventListener('DOMContentLoaded', () => {
+            const body = document.body;
+            const nightModeEnabled = localStorage.getItem('nightMode') === 'true';
+
+            if (nightModeEnabled) {
+                body.classList.add('night-mode');
+            } else {
+                body.classList.remove('night-mode');
+            }
+            const nightModeToggle = document.getElementById('night-mode-toggle');
+            nightModeToggle.style.display = 'block';
+        });
+document.addEventListener('DOMContentLoaded', applyNightMode);
+</script>
+
+
+<Style>
+    h1{
+    margin-left:15px;
+    }
+    #question-buttons button{
+    margin-left:15px;
+    }
+</Style>
 </body>
 </html>

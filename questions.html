@@ -95,5 +95,60 @@
                 });
         });
     </script>
+
+
+
+<button id="night-mode-toggle" class="btn" onclick="toggleNightMode()">Night Mode</button>
+<link rel="stylesheet" href="common.css">
+<script>
+            function toggleNightMode() {
+            const body = document.body;
+            body.classList.toggle('night-mode');
+            
+            // Check if night mode is currently enabled
+            const nightModeEnabled = body.classList.contains('night-mode');
+            
+            // Store the night mode preference in localStorage
+            localStorage.setItem('nightMode', nightModeEnabled);
+                }
+        function applyNightMode() {
+            const body = document.body;
+            const nightModeEnabled = localStorage.getItem('nightMode') === 'true';
+
+            if (nightModeEnabled) {
+                body.classList.add('night-mode');
+            } else {
+                body.classList.remove('night-mode');
+            }
+        }
+        document.addEventListener('DOMContentLoaded', () => {
+            const body = document.body;
+            const nightModeEnabled = localStorage.getItem('nightMode') === 'true';
+
+            if (nightModeEnabled) {
+                body.classList.add('night-mode');
+            } else {
+                body.classList.remove('night-mode');
+            }
+
+            // Show night mode toggle button after applying night mode
+            const nightModeToggle = document.getElementById('night-mode-toggle');
+            nightModeToggle.style.display = 'block';
+        });
+
+// Call applyNightMode() when the page is loaded
+document.addEventListener('DOMContentLoaded', applyNightMode);
+</script>
+
+
+<style>
+#question-container{
+ border-top-left-radius:0px;
+ padding-left:30px;
+}
+button:nth-child(3){
+ transform:translatex(911px) translatey(375px);
+}
+</style>
 </body>
 </html>

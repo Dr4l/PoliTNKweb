@@ -11,6 +11,8 @@
             margin: 0;
             padding: 0;
             background-color: #f7f7f7;
+            color: #333;
+            transition: background-color 0.5s, color 0.5s;
         }
 
         header {
@@ -28,6 +30,7 @@
             background-color: #fff;
             border-radius: 5px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            color: #333;
         }
 
         h1 {
@@ -51,6 +54,23 @@
             background-color: #333;
             color: #fff;
             margin-top: 20px; 
+        }
+        body.night-mode {
+            background-color: #333;
+            color: #fff;
+        }
+
+        header.night-mode {
+            background-color: #222;
+        }
+
+        main.night-mode {
+            background-color: #333;
+            color: #fff;
+        }
+        body.night-mode .resource-list li,
+        body.night-mode h2 {
+            color: #fff !important;
         }
     </style>
 </head>
@@ -99,6 +119,7 @@
         <p>&copy; 2024 | [Your Name]</p>
     </footer>
 
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const navbarContainer = document.getElementById('navbar-container');
@@ -112,5 +133,37 @@
                 });
         });
     </script>
+
+
+<button id="night-mode-toggle" class="btn" onclick="toggleNightMode()">Night Mode</button>
+<link rel="stylesheet" href="common.css">
+<script>
+        function toggleNightMode() {
+        const body = document.body;
+        const main = document.querySelector('main');
+        body.classList.toggle('night-mode');
+        main.classList.toggle('night-mode');
+        const nightModeEnabled = body.classList.contains('night-mode');
+        localStorage.setItem('nightMode', nightModeEnabled);
+    }
+
+    function applyNightMode() {
+        const body = document.body;
+        const main = document.querySelector('main');
+        const nightModeEnabled = localStorage.getItem('nightMode') === 'true';
+
+        if (nightModeEnabled) {
+            body.classList.add('night-mode');
+            main.classList.add('night-mode');
+        } else {
+            body.classList.remove('night-mode');
+            main.classList.remove('night-mode');
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', applyNightMode);
+</script>
+
+
 </body>
 </html>

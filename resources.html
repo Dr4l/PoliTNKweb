@@ -65,6 +65,24 @@
             color: #fff;
             margin-top: 20px;
         }
+        body.night-mode {
+            background-color: #333;
+            color: #fff;
+        }
+
+        header.night-mode {
+            background-color: #222;
+        }
+
+        main.night-mode {
+        background-color: #111;
+        color: #fff;
+      }
+        body.night-mode .resource-list li,
+        body.night-mode h2 {
+            background-color: #333;
+            color: #fff !important;
+        }
     </style>
 </head>
 <body>
@@ -115,5 +133,43 @@
                 });
         });
     </script>
+
+
+
+
+<button id="night-mode-toggle" class="btn" onclick="toggleNightMode()">Night Mode</button>
+<link rel="stylesheet" href="common.css">
+<script>
+        function toggleNightMode() {
+        const body = document.body;
+        const main = document.querySelector('main');
+        body.classList.toggle('night-mode');
+        main.classList.toggle('night-mode');
+        const nightModeEnabled = body.classList.contains('night-mode');
+        localStorage.setItem('nightMode', nightModeEnabled);
+    }
+    function applyNightMode() {
+        const body = document.body;
+        const main = document.querySelector('main');
+        const nightModeEnabled = localStorage.getItem('nightMode') === 'true';
+
+        if (nightModeEnabled) {
+            body.classList.add('night-mode');
+            main.classList.add('night-mode');
+        } else {
+            body.classList.remove('night-mode');
+            main.classList.remove('night-mode');
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', applyNightMode);
+</script>
+
+<style>
+    h1{
+ margin-left:20px;
+}
+</style>
+
 </body>
 </html>

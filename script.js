@@ -132,8 +132,28 @@ function handleAction() {
 }
 
 function toggleNightMode() {
+    const body = document.body;
     body.classList.toggle('night-mode');
+    
+    // Check if night mode is currently enabled
+    const nightModeEnabled = body.classList.contains('night-mode');
+    
+    // Store the night mode preference in localStorage
+    localStorage.setItem('nightMode', nightModeEnabled);
 }
+function applyNightMode() {
+    const body = document.body;
+    const nightModeEnabled = localStorage.getItem('nightMode') === 'true';
+
+    if (nightModeEnabled) {
+        body.classList.add('night-mode');
+    } else {
+        body.classList.remove('night-mode');
+    }
+}
+
+// Call applyNightMode() when the page is loaded
+document.addEventListener('DOMContentLoaded', applyNightMode);
 
 
 function clearSelection() {
@@ -141,9 +161,19 @@ function clearSelection() {
     const buttons = answerButtons.querySelectorAll('.btn');
     buttons.forEach(button => button.classList.remove('selected'));
 }
+document.addEventListener('DOMContentLoaded', () => {
+    const body = document.body;
+    const nightModeEnabled = localStorage.getItem('nightMode') === 'true';
 
-function toggleNightMode() {
-    body.classList.toggle('night-mode');
-}
+    if (nightModeEnabled) {
+        body.classList.add('night-mode');
+    } else {
+        body.classList.remove('night-mode');
+    }
+
+    // Show night mode toggle button after applying night mode
+    const nightModeToggle = document.getElementById('night-mode-toggle');
+    nightModeToggle.style.display = 'block';
+});
 
 getQuestions();
