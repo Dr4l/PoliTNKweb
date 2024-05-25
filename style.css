@@ -152,3 +152,19 @@ body {
   left: 10px;
   z-index: 100; 
 }
+
+
+/* Button */
+#night-mode-toggle{
+  margin-top:80px;
+ }
+ 
+ /* Question */
+ #question-id{
+  margin-top:80px;
+ }
+ 
+ body{
+  background-image:linear-gradient(to right, #0f0c29 0%, #302b63 33%, #24243e 100%);
+ }
+ 
