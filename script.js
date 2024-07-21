@@ -13,8 +13,9 @@ let selectedAnswers = [];
 
 async function getQuestions() {
     try {
-        const response = await fetch('questions.json');
-        questions = await response.json();
+        const response = await fetch('questions.yaml');
+        const yamlText = await response.text();
+        questions = jsyaml.load(yamlText); // Use js-yaml to parse YAML
         startGame();
     } catch (error) {
         console.error('Error loading questions:', error);
@@ -45,7 +46,7 @@ function shuffleArray(array) {
 function showQuestion(question) {
     const questionIdElement = document.getElementById('question-id-number');
     if (questionIdElement) {
-        questionIdElement.innerText = question.id;
+        questionIdElement.innerText = ` ${question.id}`;
     }
 
     // Render the question text using MathJax
@@ -59,24 +60,35 @@ function showQuestion(question) {
         const button = document.createElement('button');
         button.innerHTML = answer.text;
         button.classList.add('btn');
-        button.addEventListener('click', () => toggleAnswerSelection(answer, button));
+        button.addEventListener('click', () => handleAnswerSelection(answer, button, question.multipleCorrect));
         answerButtons.appendChild(button);
         MathJax.typeset([button]); // Trigger MathJax to typeset each answer button
     });
 }
 
-function toggleAnswerSelection(answer, button) {
-    const answerIndex = selectedAnswers.indexOf(answer);
-    if (answerIndex === -1) {
-        // Answer not selected, add it to selected answers
-        selectedAnswers.push(answer);
-        button.classList.add('selected');
+
+function handleAnswerSelection(answer, button, multipleCorrect) {
+    if (!multipleCorrect) {
+        // Single correct answer: toggle selection
+        const currentlySelected = selectedAnswers.length > 0 && selectedAnswers[0] === answer;
+        clearSelection(); // Clear previous selection
+        if (!currentlySelected) {
+            selectedAnswers = [answer];
+            button.classList.add('selected');
+        }
     } else {
-        // Answer already selected, remove it from selected answers
-        selectedAnswers.splice(answerIndex, 1);
-        button.classList.remove('selected');
+        // Multiple correct answers: add or remove selection
+        const index = selectedAnswers.indexOf(answer);
+        if (index === -1) {
+            selectedAnswers.push(answer);
+            button.classList.add('selected');
+        } else {
+            selectedAnswers.splice(index, 1);
+            button.classList.remove('selected');
+        }
     }
 }
+
 
 function checkAnswers() {
     const correctAnswers = questions[currentQuestionIndex].answers.filter(answer => answer.correct);
@@ -154,7 +166,6 @@ function applyNightMode() {
 
 // Call applyNightMode() when the page is loaded
 document.addEventListener('DOMContentLoaded', applyNightMode);
-
 
 function clearSelection() {
     selectedAnswers = [];

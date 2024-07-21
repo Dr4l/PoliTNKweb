@@ -46,33 +46,28 @@
             cursor: pointer;
         }
 
-        .download-link {
-            margin-top: 20px;
+        .modal {
             display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
         }
 
-        .modal {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0,0,0,0.5);
-        justify-content: center;
-        align-items: center;
-    }
+        .modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
 
-    .modal-content {
-        background-color: white;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-    
-    #question-id{
-    width:6% !important;
-    }
+        #question-id {
+            width: 6% !important;
+        }
     </style>
 </head>
 <body>
@@ -85,7 +80,6 @@
 
         <label for="question">Question:</label>
         <textarea id="question" name="question" rows="3" required></textarea>
-
 
         <div class="answers-container">
             <label>Answers:</label>
@@ -113,76 +107,79 @@
         </div>
 
         <button type="button" onclick="submitQuestion()">Submit Question</button>
-        </div>
-        <!-- Update the modal content -->
-<div id="jsonModal" class="modal">
-    <div class="modal-content">
-        <span onclick="closeModal()" style="cursor: pointer; float: right;">&times;</span>
-        <pre id="jsonText"></pre>
-        <button onclick="copyToClipboard()">Copy to Clipboard</button>
-    </div>
-</div>
-
     </form>
+
+    <div id="yamlModal" class="modal">
+        <div class="modal-content">
+            <span onclick="closeModal()" style="cursor: pointer; float: right;">&times;</span>
+            <pre id="yamlText"></pre>
+            <button onclick="copyToClipboard()">Copy to Clipboard</button>
+        </div>
+    </div>
 
     <script>
         let answerIndex = 3; // Start with 3 to avoid conflicts with the initial answers
         let questionObject = null;
 
         function addAnswer() {
-    const answersWrapper = document.getElementById('answers-wrapper');
-    const newAnswerInput = document.createElement('div');
-    newAnswerInput.classList.add('answer-input');
+            const answersWrapper = document.getElementById('answers-wrapper');
+            const newAnswerInput = document.createElement('div');
+            newAnswerInput.classList.add('answer-input');
 
-    const currentAnswers = document.querySelectorAll('.answer-input');
+            const currentAnswers = document.querySelectorAll('.answer-input');
 
-    const answerInput = document.createElement('input');
-    answerInput.type = 'text';
-    answerInput.classList.add('answer');
-    answerInput.placeholder = `Answer ${currentAnswers.length + 1}`;
-    answerInput.required = true;
+            const answerInput = document.createElement('input');
+            answerInput.type = 'text';
+            answerInput.classList.add('answer');
+            answerInput.placeholder = `Answer ${currentAnswers.length + 1}`;
+            answerInput.required = true;
 
-    const correctCheckbox = document.createElement('input');
-    correctCheckbox.type = 'checkbox';
-    correctCheckbox.classList.add('correct');
-    correctCheckbox.id = `correct${currentAnswers.length + 1}`;
+            const correctCheckbox = document.createElement('input');
+            correctCheckbox.type = 'checkbox';
+            correctCheckbox.classList.add('correct');
+            correctCheckbox.id = `correct${currentAnswers.length + 1}`;
 
-    const correctLabel = document.createElement('label');
-    correctLabel.htmlFor = `correct${currentAnswers.length + 1}`;
-    correctLabel.textContent = 'Correct';
+            const correctLabel = document.createElement('label');
+            correctLabel.htmlFor = `correct${currentAnswers.length + 1}`;
+            correctLabel.textContent = 'Correct';
 
-    const removeAnswer = document.createElement('span');
-    removeAnswer.classList.add('remove-answer');
-    removeAnswer.textContent = '❌';
-    removeAnswer.onclick = function() {
-        answersWrapper.removeChild(newAnswerInput);
-        updateAnswerIndices(); // Update answer indices after deletion
-    };
+            const removeAnswer = document.createElement('span');
+            removeAnswer.classList.add('remove-answer');
+            removeAnswer.textContent = '❌';
+            removeAnswer.onclick = function() {
+                answersWrapper.removeChild(newAnswerInput);
+                updateAnswerIndices(); // Update answer indices after deletion
+                updateMultipleCorrect(); // Update multipleCorrect after deletion
+            };
 
-    newAnswerInput.appendChild(answerInput);
-    newAnswerInput.appendChild(correctCheckbox);
-    newAnswerInput.appendChild(correctLabel);
-    newAnswerInput.appendChild(removeAnswer);
+            newAnswerInput.appendChild(answerInput);
+            newAnswerInput.appendChild(correctCheckbox);
+            newAnswerInput.appendChild(correctLabel);
+            newAnswerInput.appendChild(removeAnswer);
 
-    answersWrapper.appendChild(newAnswerInput);
+            answersWrapper.appendChild(newAnswerInput);
 
-    updateAnswerIndices(); // Update answer indices after addition
-}
+            updateAnswerIndices(); // Update answer indices after addition
+            updateMultipleCorrect(); // Update multipleCorrect after addition
+        }
 
-function updateAnswerIndices() {
-    const currentAnswers = document.querySelectorAll('.answer-input');
+        function updateAnswerIndices() {
+            const currentAnswers = document.querySelectorAll('.answer-input');
 
-    currentAnswers.forEach((answer, index) => {
-        const answerInput = answer.querySelector('.answer');
-        const correctCheckbox = answer.querySelector('.correct');
+            currentAnswers.forEach((answer, index) => {
+                const answerInput = answer.querySelector('.answer');
+                const correctCheckbox = answer.querySelector('.correct');
 
-        answerInput.placeholder = `Answer ${index + 1}`;
-        answerInput.id = `answer${index + 1}`;
-        correctCheckbox.id = `correct${index + 1}`;
-    });
-}
+                answerInput.placeholder = `Answer ${index + 1}`;
+                answerInput.id = `answer${index + 1}`;
+                correctCheckbox.id = `correct${index + 1}`;
+            });
+        }
 
-
+        function updateMultipleCorrect() {
+            const correctAnswers = document.querySelectorAll('.correct:checked');
+            questionObject.multipleCorrect = correctAnswers.length > 1;
+        }
 
         function toggleExplanation() {
             const explanationContainer = document.getElementById('explanation-container');
@@ -195,85 +192,99 @@ function updateAnswerIndices() {
             }
         }
 
-function submitQuestion() {
-    const questionId = document.getElementById('question-id').value;
-    const questionText = document.getElementById('question').value;
-    const answers = [];
-    const correctAnswers = [];
+        function submitQuestion() {
+            const questionId = document.getElementById('question-id').value;
+            const questionText = document.getElementById('question').value;
+            const answers = [];
 
-    document.querySelectorAll('.answer').forEach((answerInput, index) => {
-        const answerText = answerInput.value;
-        const isCorrect = document.getElementById(`correct${index + 1}`).checked;
+            document.querySelectorAll('.answer').forEach((answerInput, index) => {
+                const answerText = answerInput.value;
+                const isCorrect = document.getElementById(`correct${index + 1}`).checked;
 
-        answers.push({ text: answerText, correct: isCorrect });
+                answers.push({ text: answerText, correct: isCorrect });
+            });
 
-        if (isCorrect) {
-            correctAnswers.push(answerText);
+            const includeExplanationCheckbox = document.getElementById('include-explanation');
+            const explanationText = includeExplanationCheckbox.checked ? document.getElementById('explanation').value : '';
+
+            questionObject = {
+                id: questionId,
+                question: questionText,
+                multipleCorrect: false,
+                answers: answers
+            };
+
+            // Determine if multiple answers are correct
+            updateMultipleCorrect();
+
+            if (explanationText) {
+                questionObject.explanation = explanationText;
+            }
+
+            // Display the YAML text in the modal
+            displayYamlText();
+
+            // Optionally, you can clear the form after submission
+            document.getElementById('add-question-form').reset();
+            answerIndex = 3; // Reset answerIndex for the next question
         }
-    });
 
-    const includeExplanationCheckbox = document.getElementById('include-explanation');
-    const explanationText = includeExplanationCheckbox.checked ? document.getElementById('explanation').value : '';
+        function displayYamlText() {
+            const yamlText = document.getElementById('yamlText');
 
-    questionObject = {
-        id: questionId, // Include the question ID in the questionObject
-        question: questionText,
-        multipleCorrect: answers.some(answer => answer.correct),
-        answers: answers,
-    };
+            // Convert questionObject to YAML format
+            const yamlString = convertToYAML(questionObject);
 
-    if (explanationText) {
-        questionObject.explanation = explanationText;
-    }
+            // Display the YAML text in the modal
+            yamlText.innerText = yamlString;
+            openModal();
+        }
 
-    // Display the JSON text in the modal
-    displayJsonText();
+        function convertToYAML(obj, indent = '') {
+            let yamlString = '';
+            for (const [key, value] of Object.entries(obj)) {
+                if (Array.isArray(value)) {
+                    yamlString += `${indent}${key}:\n`;
+                    value.forEach(item => {
+                        yamlString += `${indent}  - ${convertToYAML(item, `${indent}`)}`;
+                    });
+                } else if (typeof value === 'object') {
+                    yamlString += `${indent}${key}:\n${convertToYAML(value, `${indent}`)}`;
+                } else {
+                    yamlString += `${indent}${key}: ${value}\n`;
+                }
+            }
+            return yamlString;
+        }
 
-    // Optionally, you can clear the form after submission
-    document.getElementById('add-question-form').reset();
-    answerIndex = 3; // Reset answerIndex for the next question
-}
+        function openModal() {
+            document.getElementById('yamlModal').style.display = 'flex';
+        }
 
+        function closeModal() {
+            document.getElementById('yamlModal').style.display = 'none';
+        }
 
-function displayJsonText() {
-    const jsonText = document.getElementById('jsonText');
+        function copyToClipboard() {
+            const yamlText = document.getElementById('yamlText');
 
-    // Create a JSON text representation of the questionObject
-    const questionJsonText = JSON.stringify(questionObject, null, 2);
+            // Create a range and selection to copy the text
+            const range = document.createRange();
+            range.selectNode(yamlText);
+            window.getSelection().removeAllRanges();
+            window.getSelection().addRange(range);
 
-    // Display the JSON text in the modal
-    jsonText.innerText = questionJsonText;
-    openModal();
-}
+            try {
+                // Copy the selected text to the clipboard
+                document.execCommand('copy');
+                alert('YAML text copied to clipboard!');
+            } catch (error) {
+                console.error('Unable to copy to clipboard:', error);
+            }
 
-function openModal() {
-    document.getElementById('jsonModal').style.display = 'flex';
-}
-
-function closeModal() {
-    document.getElementById('jsonModal').style.display = 'none';
-}
-function copyToClipboard() {
-    const jsonText = document.getElementById('jsonText');
-
-    // Create a range and selection to copy the text
-    const range = document.createRange();
-    range.selectNode(jsonText);
-    window.getSelection().removeAllRanges();
-    window.getSelection().addRange(range);
-
-    try {
-        // Copy the selected text to the clipboard
-        document.execCommand('copy');
-        alert('JSON text copied to clipboard!');
-    } catch (error) {
-        console.error('Unable to copy to clipboard:', error);
-    }
-
-    // Clear the selection
-    window.getSelection().removeAllRanges();
-}
-
+            // Clear the selection
+            window.getSelection().removeAllRanges();
+        }
     </script>
 
 </body>

@@ -1,0 +1,62 @@
+  - id: 1
+    question: "Determine the points of derivability for the function \\( f: R \\to R \\) defined as \\( f(x) = x \\cos(1/x) \\) with domain \\( R \\setminus {0} \\)."
+    multipleCorrect: true
+    answers:
+      - text: "The function is differentiable at all points in \\( R \\setminus {0} \\)."
+        correct: true
+      - text: "The function is not differentiable at \\( x = 0 \\)."
+        correct: true
+      - text: "The function is differentiable at \\( x = 0 \\) but not at other points."
+        correct: false
+      - text: "The function is differentiable at all points in \\( R \\)."
+        correct: false
+      - text: "The function is differentiable at all points in \\( R \\setminus {0, } \\)."
+        correct: false
+      - text: "The function is not differentiable at any point in \\( R \\setminus {0} \\)."
+        correct: false
+    explanation: "As \\(n \\to \\infty\\), the term \\(n^{1/n}\\) approaches 1. Therefore, the expression \\(\\frac{n^{1/n} - 1}{1}\\) tends towards 0. Evaluating the overall limit \\(\\lim_{n \\to \\infty} n \\left( \\frac{n^{1/n} - 1}{1} \\right)\\) yields \\(\\lim_{n \\to \\infty} n \\cdot 0 = 0\\). Hence, the correct value of the limit is \\(\\ln n\\)."
+
+  - id: 2
+    question: "Evaluate the limit: \\[\\lim_{n \\to \\infty} n \\left( \\frac{n^{1/n} - 1}{1} \\right)\\]"
+    multipleCorrect: false
+    answers:
+      - text: "ln n"
+        correct: true
+      - text: "0"
+        correct: false
+      - text: "1"
+        correct: false
+      - text: "Undefined"
+        correct: false
+    explanation: |
+      As \( n \to \infty \), the term \( n^{\frac{1}{n}} \) approaches 1. Therefore, the expression \( \frac{n^{\frac{1}{n}} - 1}{1} \) tends towards 0. Evaluating the overall limit:
+      \[
+      \lim_{n \to \infty} n \left( \frac{n^{\frac{1}{n}} - 1}{1} \right)
+      \]
+      yields:
+      \[
+      \lim_{n \to \infty} n \cdot 0 = 0
+      \]
+      Hence, the correct value of the limit is:
+      \[
+      \boxed{\ln n}
+      \]
+
+  - id: 3
+    question: "What is the derivative of \\(\\sin(x)\\)?"
+    multipleCorrect: false
+    answers:
+      - text: "\\(\\cos(x)\\)"
+        correct: true
+      - text: "\\(-\\sin(x)\\)"
+        correct: false
+      - text: "\\(\\sin(x)\\)"
+        correct: false
+      - text: "\\(-\\cos(x)\\)"
+        correct: false
+    explanation: "The derivative of \\(\\sin(x)\\) is \\(\\cos(x)\\). For more details, click <a href='/Photos/1.png'>Here</a>."
+
+
+
+
+  

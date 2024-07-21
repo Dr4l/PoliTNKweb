@@ -164,7 +164,12 @@ body {
   margin-top:80px;
  }
  
- body{
+
+ body {
+  background-image: linear-gradient(to right, #11998e 0%, #38ef7d 100%);
+  transition: background-image 0.5s;
+}
+
+body.night-mode {
   background-image:linear-gradient(to right, #0f0c29 0%, #302b63 33%, #24243e 100%);
- }
- 
+}

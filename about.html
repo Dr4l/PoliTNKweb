@@ -4,30 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About Me</title>
-    
+    <link rel="stylesheet" href="common.css">
     <style>
         body {
-            font-family: Arial, sans-serif;
+            background-image: linear-gradient(to right, #11998e 0%, #38ef7d 100%);
+            transition: background-image 0.5s, color 0.5s;
             margin: 0;
             padding: 0;
-            background-color: #f7f7f7;
-            color: #333;
-            transition: background-color 0.5s, color 0.5s;
         }
 
         header {
-            background-color: #333;
-            color: #fff;
+            background-image: linear-gradient(to right, #11998e 0%, #38ef7d 100%);
+            color: #000000;
             padding: 20px;
             text-align: center;
-            margin-top: 0; 
+            margin-top: 0;
         }
 
         main {
             max-width: 800px;
-            margin: 20px auto; 
+            margin: 20px auto;
             padding: 20px;
-            background-color: #fff;
+            background-image: linear-gradient(to right, #11998e 0%, #38ef7d 100%);
             border-radius: 5px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             color: #333;
@@ -35,42 +33,68 @@
 
         h1 {
             font-size: 2.5rem;
-            margin-top: 0; 
+            margin-top: 0;
         }
 
         h2 {
             font-size: 1.8rem;
             color: #333;
-            margin-top: 0.5em; 
+            margin-top: 0.5em;
         }
 
         section {
-            margin-bottom: 20px; 
+            margin-bottom: 20px;
         }
 
         footer {
             text-align: center;
             padding: 10px;
-            background-color: #333;
+            background-image: linear-gradient(to right, #11998e 0%, #38ef7d 100%);
             color: #fff;
-            margin-top: 20px; 
+            margin-top: 20px;
         }
+
         body.night-mode {
-            background-color: #333;
+            background-image: linear-gradient(to right, #0f0c29 0%, #302b63 33%, #24243e 100%);
             color: #fff;
         }
 
-        header.night-mode {
-            background-color: #222;
+        body.night-mode header {
+            background-image: linear-gradient(to right, #0f0c29 0%, #302b63 33%, #24243e 100%);
+            color:#fff;
         }
 
-        main.night-mode {
-            background-color: #333;
+        body.night-mode main {
+            background-image: linear-gradient(to right, #0f0c29 0%, #302b63 33%, #24243e 100%);
             color: #fff;
         }
-        body.night-mode .resource-list li,
-        body.night-mode h2 {
+        body.night-mode footer {
+            background-image: linear-gradient(to right, #0f0c29 0%, #302b63 33%, #24243e 100%);
+        }
+
+
+        body.night-mode h2, body.night-mode .resource-list li {
             color: #fff !important;
+        }
+
+        /* Night mode toggle button */
+        #night-mode-toggle {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            border-radius: 75%;
+            z-index: 999;
+            background-color: #ffffff;
+            color: #333;
+            border: 2px solid #000;
+            cursor: pointer;
+            padding: 10px;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+
+        #night-mode-toggle:hover {
+            background-color: #ddd;
+            border-color: #555;
         }
     </style>
 </head>
@@ -119,6 +143,7 @@
         <p>&copy; 2024 | [Your Name]</p>
     </footer>
 
+    <button id="night-mode-toggle" class="btn" onclick="toggleNightMode()">Night Mode</button>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -131,39 +156,27 @@
                 .catch(error => {
                     console.error('Failed to fetch navbar:', error);
                 });
+
+            applyNightMode();
         });
-    </script>
 
-
-<button id="night-mode-toggle" class="btn" onclick="toggleNightMode()">Night Mode</button>
-<link rel="stylesheet" href="common.css">
-<script>
         function toggleNightMode() {
-        const body = document.body;
-        const main = document.querySelector('main');
-        body.classList.toggle('night-mode');
-        main.classList.toggle('night-mode');
-        const nightModeEnabled = body.classList.contains('night-mode');
-        localStorage.setItem('nightMode', nightModeEnabled);
-    }
-
-    function applyNightMode() {
-        const body = document.body;
-        const main = document.querySelector('main');
-        const nightModeEnabled = localStorage.getItem('nightMode') === 'true';
-
-        if (nightModeEnabled) {
-            body.classList.add('night-mode');
-            main.classList.add('night-mode');
-        } else {
-            body.classList.remove('night-mode');
-            main.classList.remove('night-mode');
+            const body = document.body;
+            body.classList.toggle('night-mode');
+            const nightModeEnabled = body.classList.contains('night-mode');
+            localStorage.setItem('nightMode', nightModeEnabled);
         }
-    }
 
-    document.addEventListener('DOMContentLoaded', applyNightMode);
-</script>
+        function applyNightMode() {
+            const body = document.body;
+            const nightModeEnabled = localStorage.getItem('nightMode') === 'true';
 
-
+            if (nightModeEnabled) {
+                body.classList.add('night-mode');
+            } else {
+                body.classList.remove('night-mode');
+            }
+        }
+    </script>
 </body>
 </html>

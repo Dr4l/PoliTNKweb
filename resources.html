@@ -6,15 +6,15 @@
     <title>Resurse</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            background-image: linear-gradient(to right, #11998e 0%, #38ef7d 100%);
+            transition: background-image 0.5s, color 0.5s;
             margin: 0;
             padding: 0;
-            background-color: #f7f7f7;
         }
 
         header {
-            background-color: #333;
-            color: #fff;
+            background-image: linear-gradient(to right, #11998e 0%, #38ef7d 100%);
+            color: #000000;
             padding: 20px;
             text-align: center;
             margin-top: 0;
@@ -24,9 +24,10 @@
             max-width: 800px;
             margin: 20px auto;
             padding: 20px;
-            background-color: #fff;
+            background-image: linear-gradient(to right, #11998e 0%, #38ef7d 100%);
             border-radius: 5px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            color: #333;
         }
 
         h1 {
@@ -34,54 +35,65 @@
             margin-top: 0;
         }
 
-        .resource-list {
-            list-style: none;
-            padding: 0;
+        h2 {
+            font-size: 1.8rem;
+            color: #333;
+            margin-top: 0.5em;
         }
 
-        .resource-list li {
-            border-bottom: 1px solid #ddd;
-            padding: 15px 0;
-        }
-
-        .resource-list li:last-child {
-            border-bottom: none;
-        }
-
-        .resource-link {
-            color: #007bff;
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-        .resource-link:hover {
-            text-decoration: underline;
+        section {
+            margin-bottom: 20px;
         }
 
         footer {
             text-align: center;
             padding: 10px;
-            background-color: #333;
+            background-image: linear-gradient(to right, #11998e 0%, #38ef7d 100%);
             color: #fff;
             margin-top: 20px;
         }
+
         body.night-mode {
-            background-color: #333;
+            background-image: linear-gradient(to right, #0f0c29 0%, #302b63 33%, #24243e 100%);
             color: #fff;
         }
 
-        header.night-mode {
-            background-color: #222;
+        body.night-mode header {
+            background-image: linear-gradient(to right, #0f0c29 0%, #302b63 33%, #24243e 100%);
+            color:#fff;
         }
 
-        main.night-mode {
-        background-color: #111;
-        color: #fff;
-      }
-        body.night-mode .resource-list li,
-        body.night-mode h2 {
-            background-color: #333;
+        body.night-mode main {
+            background-image: linear-gradient(to right, #0f0c29 0%, #302b63 33%, #24243e 100%);
+            color: #fff;
+        }
+        body.night-mode footer {
+            background-image: linear-gradient(to right, #0f0c29 0%, #302b63 33%, #24243e 100%);
+        }
+
+
+        body.night-mode h2, body.night-mode .resource-list li {
             color: #fff !important;
+        }
+
+        /* Night mode toggle button */
+        #night-mode-toggle {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            border-radius: 75%;
+            z-index: 999;
+            background-color: #ffffff;
+            color: #333;
+            border: 2px solid #000;
+            cursor: pointer;
+            padding: 10px;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+
+        #night-mode-toggle:hover {
+            background-color: #ddd;
+            border-color: #555;
         }
     </style>
 </head>

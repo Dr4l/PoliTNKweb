@@ -4,30 +4,125 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Catalogue</title>
-    <div id="navbar-container"></div>
+    <link rel="stylesheet" href="common.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            background-image: linear-gradient(to right, #11998e 0%, #38ef7d 100%);
+            transition: background-image 0.5s, color 0.5s;
+        }
+
+        body.night-mode {
+            background-image: linear-gradient(to right, #0f0c29 0%, #302b63 33%, #24243e 100%);
+            color: #fff;
+        }
+
+        /* General styles for buttons */
+        button {
+            background-color: #333; /* Default dark background color for buttons */
+            color: #fff; /* Default text color */
+            border: none; /* Remove default border */
+            padding: 10px 20px; /* Add padding */
+            border-radius: 5px; /* Round corners */
+            cursor: pointer; /* Pointer cursor on hover */
+            transition: background-color 0.3s, color 0.3s; /* Smooth color transition */
+            font-size: 16px; /* Consistent font size */
+            margin: 5px; /* Space between buttons */
+        }
+
+        button:hover {
+            background-color: #555; /* Slightly lighter background color on hover */
+        }
+
+        /* Styles for buttons in night mode */
+        body.night-mode button {
+            background-color: #fff; /* White background for buttons in night mode */
+            color: #333; /* Dark text color for readability */
+        }
+
+        body.night-mode button:hover {
+            background-color: #ddd; /* Slightly darker background color on hover in night mode */
+        }
+
+        /* Night mode toggle button */
+        #night-mode-toggle {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            border-radius: 75%;
+            z-index: 999;
+            background-color: #ffffff;
+            color: #333;
+            border: 2px solid #000;
+            cursor: pointer;
+            padding: 10px;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+
+        #night-mode-toggle:hover {
+            background-color: #ddd;
+            border-color: #555;
+        }
+
+        /* Styles for question ID display */
+        #question-id {
+            position: fixed;
+            bottom: 10px;
+            left: 10px;
+            border-radius: 75%;
+            z-index: 100;
+            background-color: #ffffff;
+            color: #333;
+            padding: 10px;
+            transition: background-color 0.3s;
+        }
+
+        /* Consistent styling for headings and question buttons */
+        h1 {
+            margin-left: 15px;
+        }
+
+        #question-buttons button {
+            margin-left: 15px;
+            margin-bottom: 10px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Math questions</h1>
+    <div id="navbar-container"></div>
+
+    <h1>Math Questions</h1>
     <div id="question-buttons"></div>
+    <button id="night-mode-toggle" class="btn" onclick="toggleNightMode()">Night Mode</button>
+
     <script>
-        // Function to fetch questions from JSON file
         async function fetchQuestions() {
             try {
-                const response = await fetch('questions.json'); // Path to your JSON file
-                const data = await response.json();
-                return data;
+                const response = await fetch('questions.yaml'); // Path to your YAML file
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const yamlText = await response.text();
+                const data = jsyaml.load(yamlText);
+                if (Array.isArray(data)) {
+                    return data;
+                } else if (data.questions) {
+                    return data.questions;
+                } else {
+                    throw new Error('Unexpected data structure');
+                }
             } catch (error) {
                 console.error('Error fetching questions:', error);
                 return [];
             }
         }
 
-        // Function to create a button for each question
         async function createQuestionButtons() {
             const questionsData = await fetchQuestions();
             const questionButtonsContainer = document.getElementById('question-buttons');
-
-            if (questionsData && questionsData.length > 0) {
+            if (questionsData.length > 0) {
                 questionsData.forEach(question => {
                     const button = document.createElement('button');
                     button.textContent = `Question nr.${question.id}`;
@@ -39,75 +134,43 @@
             }
         }
 
-        // Function to navigate to question.html with the specified question ID
         function navigateToQuestion(questionId) {
             window.location.href = `questions.html?id=${questionId}`;
         }
-        // Generate the question buttons on page load
-        createQuestionButtons();
-    </script>
-     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const navbarContainer = document.getElementById('navbar-container');
-        
-            fetch('navbar.html')
-                .then(response => response.text())
-                .then(html => {
-                    navbarContainer.innerHTML = html;
-                    // Any additional JavaScript logic to initialize navbar functionality
-                })
-                .catch(error => {
-                    console.error('Failed to fetch navbar:', error);
-                });
-        });
-    </script>
 
-
-<button id="night-mode-toggle" class="btn" onclick="toggleNightMode()">Night Mode</button>
-<link rel="stylesheet" href="common.css">
-<script>
-            function toggleNightMode() {
+        function toggleNightMode() {
             const body = document.body;
             body.classList.toggle('night-mode');
             const nightModeEnabled = body.classList.contains('night-mode');
             localStorage.setItem('nightMode', nightModeEnabled);
-                }
-        function applyNightMode() {
-            const body = document.body;
-            const nightModeEnabled = localStorage.getItem('nightMode') === 'true';
+        }
 
+        function applyNightMode() {
+            const nightModeEnabled = localStorage.getItem('nightMode') === 'true';
             if (nightModeEnabled) {
-                body.classList.add('night-mode');
+                document.body.classList.add('night-mode');
             } else {
-                body.classList.remove('night-mode');
+                document.body.classList.remove('night-mode');
             }
         }
+
         document.addEventListener('DOMContentLoaded', () => {
-            const body = document.body;
-            const nightModeEnabled = localStorage.getItem('nightMode') === 'true';
-
-            if (nightModeEnabled) {
-                body.classList.add('night-mode');
-            } else {
-                body.classList.remove('night-mode');
-            }
-            const nightModeToggle = document.getElementById('night-mode-toggle');
-            nightModeToggle.style.display = 'block';
+            createQuestionButtons();
+            applyNightMode();
+            loadNavbar();
         });
-document.addEventListener('DOMContentLoaded', applyNightMode);
-</script>
 
-
-<Style>
-    h1{
-    margin-left:15px;
-    }
-    #question-buttons button{
-    margin-left:15px;
-    }
-    button{
-        margin-bottom: 10px;
-    }
-</Style>
+        function loadNavbar() {
+            const navbarContainer = document.getElementById('navbar-container');
+            fetch('navbar.html')
+                .then(response => response.text())
+                .then(html => {
+                    navbarContainer.innerHTML = html;
+                })
+                .catch(error => {
+                    console.error('Failed to fetch navbar:', error);
+                });
+        }
+    </script>
 </body>
 </html>
